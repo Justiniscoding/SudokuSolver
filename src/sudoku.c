@@ -8,36 +8,6 @@ void InitializeSudoku(Sudoku *sudoku) {
 			sudoku->grid[i][j] = 0;
 		}
 	}
-	sudoku->grid[0][0] = 5;
-	sudoku->grid[0][1] = 3;
-	sudoku->grid[0][4] = 7;
-	sudoku->grid[1][0] = 6;
-	sudoku->grid[1][3] = 1;
-	sudoku->grid[1][4] = 9;
-	sudoku->grid[1][5] = 5;
-	sudoku->grid[2][1] = 9;
-	sudoku->grid[2][2] = 8;
-	sudoku->grid[2][7] = 6;
-	sudoku->grid[3][0] = 8;
-	sudoku->grid[3][4] = 6;
-	sudoku->grid[3][8] = 3;
-	sudoku->grid[4][0] = 4;
-	sudoku->grid[4][3] = 8;
-	sudoku->grid[4][5] = 3;
-	sudoku->grid[4][8] = 1;
-	sudoku->grid[5][0] = 7;
-	sudoku->grid[5][4] = 2;
-	sudoku->grid[5][8] = 6;
-	sudoku->grid[6][1] = 6;
-	sudoku->grid[6][6] = 2;
-	sudoku->grid[6][7] = 8;
-	sudoku->grid[7][3] = 4;
-	sudoku->grid[7][4] = 1;
-	sudoku->grid[7][5] = 9;
-	sudoku->grid[7][8] = 5;
-	sudoku->grid[8][4] = 8;
-	sudoku->grid[8][7] = 7;
-	sudoku->grid[8][8] = 9;
 }
 
 void PrintSudoku(Sudoku *sudoku) {
@@ -103,14 +73,71 @@ void GetFirstEmptyIndex(Sudoku *sudoku, int *indicies) {
 	}
 }
 
+bool IsSudokuSolved(Sudoku *sudoku) {
+	for (int i = 0; i < 9; i++) {
+		bool encounteredInRow[9];
+		bool encounteredInColumn[9];
+
+		for (int j = 0; j < 9; j++) {
+			encounteredInRow[j] = false;
+			encounteredInColumn[j] = false;
+		}
+
+		for (int j = 0; j < 9; j++) {
+			int rowValue = sudoku->grid[i][j] - 1;
+			int columnValue = sudoku->grid[j][i] - 1;
+
+			if (rowValue == -1 || columnValue == -1) {
+				return false;
+			}
+
+			if (encounteredInRow[rowValue] == true) {
+				return false;
+			}
+			if (encounteredInColumn[columnValue] == true) {
+				return false;
+			}
+			encounteredInRow[rowValue] = true;
+			encounteredInColumn[columnValue] = true;
+		}
+	}
+
+	for (int i = 0; i < 9; i += 3) {
+		for (int j = 0; j < 9; j += 3) {
+			bool encounteredInClump[9];
+
+			for (int k = 0; k < 9; k++) {
+				encounteredInClump[k] = false;
+			}
+
+			for (int k = i; k < i + 3; k++) {
+				for (int l = j; l < j + 3; l++) {
+					int value = sudoku->grid[k][l] - 1;
+
+					if (encounteredInClump[value] == true) {
+						return false;
+					}
+
+					encounteredInClump[value] = true;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
 bool SolveSudoku(Sudoku *sudoku) {
 	int indicies[2] = {-1, -1};
 	GetFirstEmptyIndex(sudoku, indicies);
 
 	if (indicies[0] == -1) {
-		printf("Sudoku has been solved!\n");
-		PrintSudoku(sudoku);
-		return true;
+		if (IsSudokuSolved(sudoku)) {
+			PrintSudoku(sudoku);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	for (int i = 1; i < 10; i++) {

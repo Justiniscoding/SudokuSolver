@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "sudoku.h"
 
@@ -6,25 +8,30 @@ int main() {
 	Sudoku sudoku;
 	InitializeSudoku(&sudoku);
 
-	/* for (int i = 0; i < 9; i++) { */
-	/* 	char c; */
-	/* 	for (int j = 0; j < 9; j++) { */
-	/* 		scanf("%c", &c); */
-	/**/
-	/* 		int number; */
-	/**/
-	/* 		if (c == ' ') { */
-	/* 			number = 0; */
-	/* 		} else { */
-	/* 			number = (int)c; */
-	/* 		} */
-	/* 		sudoku.grid[i][j] = c; */
-	/* 	} */
-	/* 	scanf("%c", &c); */
-	/* } */
+	for (int i = 0; i < 9; i++) {
+		char c;
+		for (int j = 0; j < 9; j++) {
+			scanf("%c", &c);
 
+			int number;
+
+			if (c == ' ') {
+				number = 0;
+			} else {
+				number = atoi(&c);
+			}
+			sudoku.grid[i][j] = number;
+		}
+		scanf("%c", &c);
+	}
+
+	clock_t start, end;
 	PrintSudoku(&sudoku);
+	start = clock();
 	SolveSudoku(&sudoku);
+	end = clock();
+	printf("It took %f seconds to solve the sudoku!",
+		   (double)(end - start) / CLOCKS_PER_SEC);
 
 	return 0;
 }

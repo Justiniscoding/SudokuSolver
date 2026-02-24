@@ -14,6 +14,7 @@ void PrintSudoku(Sudoku *sudoku);
 void GetFirstEmptyIndex(Sudoku *sudoku, int *indicies);
 
 bool SolveSudoku(Sudoku *sudoku);
+bool IsSudokuSolved(Sudoku *sudoku);
 bool IsPlacementValid(Sudoku *sudoku, int row, int column, int value);
 
 Sudoku CloneSudoku(Sudoku *sodoku);
