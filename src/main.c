@@ -24,6 +24,7 @@ int main() {
 	/* } */
 
 	PrintSudoku(&sudoku);
+	SolveSudoku(&sudoku);
 
 	return 0;
 }

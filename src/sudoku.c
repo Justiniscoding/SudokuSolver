@@ -77,8 +77,8 @@ bool IsPlacementValid(Sudoku *sudoku, int row, int column, int value) {
 		}
 	}
 
-	int clumpRow = row / 3;
-	int clumpCol = column / 3;
+	int clumpRow = (row / 3) * 3;
+	int clumpCol = (column / 3) * 3;
 
 	for (int i = clumpRow; i < clumpRow + 3; i++) {
 		for (int j = clumpCol; j < clumpCol + 3; j++) {
@@ -89,4 +89,51 @@ bool IsPlacementValid(Sudoku *sudoku, int row, int column, int value) {
 	}
 
 	return true;
+}
+
+void GetFirstEmptyIndex(Sudoku *sudoku, int *indicies) {
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
+			if (sudoku->grid[i][j] == 0) {
+				indicies[0] = i;
+				indicies[1] = j;
+				return;
+			}
+		}
+	}
+}
+
+bool SolveSudoku(Sudoku *sudoku) {
+	int indicies[2] = {-1, -1};
+	GetFirstEmptyIndex(sudoku, indicies);
+
+	if (indicies[0] == -1) {
+		printf("Sudoku has been solved!\n");
+		PrintSudoku(sudoku);
+		return true;
+	}
+
+	for (int i = 1; i < 10; i++) {
+		if (IsPlacementValid(sudoku, indicies[0], indicies[1], i)) {
+			Sudoku new = CloneSudoku(sudoku);
+			new.grid[indicies[0]][indicies[1]] = i;
+			if (SolveSudoku(&new)) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+Sudoku CloneSudoku(Sudoku *sodoku) {
+	Sudoku new;
+
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
+			new.grid[i][j] = sodoku->grid[i][j];
+		}
+	}
+
+	return new;
 }
