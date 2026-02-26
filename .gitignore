@@ -1,3 +1,4 @@
 SudokuSolver
 .cache
 compile_commands.json
+SudokuSolver.dSYM

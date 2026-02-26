@@ -1,6 +1,7 @@
 #include "sudoku.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 void InitializeSudoku(Sudoku *sudoku) {
 	for (int i = 0; i < 9; i++) {
@@ -154,12 +155,61 @@ bool SolveSudoku(Sudoku *sudoku) {
 	return false;
 }
 
-Sudoku CloneSudoku(Sudoku *sodoku) {
+void GenerateRandomSudoku(Sudoku *sudoku) {
+	FillSudokuRandomly(sudoku);
+	RemoveSudokuSquares(sudoku);
+}
+
+void RemoveSudokuSquares(Sudoku *sudoku) {
+	for (int i = 0; i < 75; i++) {
+		int row = rand() % 9;
+		int column = rand() % 9;
+
+		sudoku->grid[row][column] = 0;
+	}
+}
+
+bool FillSudokuRandomly(Sudoku *sudoku) {
+	int indicies[2] = {-1, -1};
+	GetFirstEmptyIndex(sudoku, indicies);
+
+	if (indicies[0] == -1) {
+		return true;
+	}
+
+	int numberOrder[9];
+
+	for (int i = 0; i < 9; i++) {
+		numberOrder[i] = i + 1;
+	}
+
+	for (int i = 0; i < 8; i++) {
+		int j = i + rand() / (RAND_MAX / (9 - i) + 1);
+		int temp = numberOrder[j];
+		numberOrder[j] = numberOrder[i];
+		numberOrder[i] = temp;
+	}
+
+	for (int i = 0; i < 9; i++) {
+		if (IsPlacementValid(sudoku, indicies[0], indicies[1],
+							 numberOrder[i])) {
+			sudoku->grid[indicies[0]][indicies[1]] = numberOrder[i];
+			if (FillSudokuRandomly(sudoku)) {
+				return true;
+			}
+		}
+	}
+
+	sudoku->grid[indicies[0]][indicies[1]] = 0;
+	return false;
+}
+
+Sudoku CloneSudoku(Sudoku *sudoku) {
 	Sudoku new;
 
 	for (int i = 0; i < 9; i++) {
 		for (int j = 0; j < 9; j++) {
-			new.grid[i][j] = sodoku->grid[i][j];
+			new.grid[i][j] = sudoku->grid[i][j];
 		}
 	}
 
