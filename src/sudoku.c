@@ -142,13 +142,14 @@ bool SolveSudoku(Sudoku *sudoku) {
 
 	for (int i = 1; i < 10; i++) {
 		if (IsPlacementValid(sudoku, indicies[0], indicies[1], i)) {
-			Sudoku new = CloneSudoku(sudoku);
-			new.grid[indicies[0]][indicies[1]] = i;
-			if (SolveSudoku(&new)) {
+			sudoku->grid[indicies[0]][indicies[1]] = i;
+			if (SolveSudoku(sudoku)) {
 				return true;
 			}
 		}
 	}
+
+	sudoku->grid[indicies[0]][indicies[1]] = 0;
 
 	return false;
 }
