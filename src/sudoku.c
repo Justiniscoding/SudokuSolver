@@ -134,7 +134,6 @@ bool SolveSudoku(Sudoku *sudoku) {
 
 	if (indicies[0] == -1) {
 		if (IsSudokuSolved(sudoku)) {
-			PrintSudoku(sudoku);
 			return true;
 		} else {
 			return false;
@@ -166,6 +165,20 @@ void RemoveSudokuSquares(Sudoku *sudoku) {
 		int column = rand() % 9;
 
 		sudoku->grid[row][column] = 0;
+	}
+	return;
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
+			int numberInCell = sudoku->grid[i][j];
+
+			sudoku->grid[i][j] = 0;
+
+			Sudoku clone = CloneSudoku(sudoku);
+
+			if (!SolveSudoku(&clone)) {
+				sudoku->grid[i][j] = numberInCell;
+			}
+		}
 	}
 }
 
