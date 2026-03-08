@@ -5,7 +5,7 @@
 
 	var gameGrid: number[][] = $state([]);
 	var hasError: boolean[][] = $state([]);
-	var focused = $state([0, 0]);
+	var focused = $state([-1, -1]);
 
 	for (let i = 0; i < 9; i++) {
 		gameGrid.push([1, 0, 2, 0, 3, 0, 4, 0, 5]);
@@ -23,7 +23,7 @@
 				return;
 			}
 
-			if (focused[0] != 0 && focused[1] != 0) {
+			if (focused[0] != -1 && focused[1] != -1) {
 				let number = parseInt(e.key);
 
 				let focusedRow = focused[0];
