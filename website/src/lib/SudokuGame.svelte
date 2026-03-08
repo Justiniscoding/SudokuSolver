@@ -8,7 +8,7 @@
 	var focused = $state([-1, -1]);
 
 	for (let i = 0; i < 9; i++) {
-		gameGrid.push([1, 0, 2, 0, 3, 0, 4, 0, 5]);
+		gameGrid.push(new Array(9).fill(0));
 		hasError.push(new Array(9).fill(false));
 	}
 
@@ -30,6 +30,7 @@
 				let focusedCol = focused[1];
 
 				gameGrid[focusedRow][focusedCol] = number;
+
 				hasError[focusedRow][focusedCol] = false;
 
 				for (let i = 0; i < 9; i++) {
@@ -52,8 +53,8 @@
 
 				for (let i = clumpRow; i < clumpRow + 3; i++) {
 					for (let j = clumpCol; j < clumpCol + 3; j++) {
-						if (i != focusedRow && i != focusedCol) {
-							inClump.add(gameGrid[clumpRow][clumpCol]);
+						if (i != focusedRow && j != focusedCol) {
+							inClump.add(gameGrid[i][j]);
 						}
 					}
 				}
