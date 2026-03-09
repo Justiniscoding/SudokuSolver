@@ -228,3 +228,43 @@ Sudoku CloneSudoku(Sudoku *sudoku) {
 
 	return new;
 }
+
+Sudoku FromString(char *string) {
+	Sudoku sudoku;
+
+	for (int i = 0; i < 81; i++) {
+		char c = string[i];
+
+		int gridRow = i / 9;
+		int gridCol = i % 9;
+
+		int number = 0;
+
+		if (c != ' ') {
+			number = (int)c;
+		}
+
+		sudoku.grid[gridRow][gridCol] = number;
+	}
+
+	return sudoku;
+}
+
+char *ToString(Sudoku sudoku) {
+	char *string;
+
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
+			char c = ' ';
+			int number = sudoku.grid[i][j];
+
+			if (number != 0) {
+				c = (char)number;
+			}
+
+			string += c;
+		}
+	}
+
+	return string;
+}
